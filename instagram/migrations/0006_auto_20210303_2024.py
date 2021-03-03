@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='comment',
             name='post',
-            field=models.ForeignKey(limit_choices_to={'is_public': True}, on_delete=django.db.models.deletion.CASCADE, to='instagram.post'),
+            field=models.ForeignKey(limit_choices_to={
+                                    'is_public': True}, on_delete=django.db.models.deletion.CASCADE, to='instagram.post'),
         ),
     ]
