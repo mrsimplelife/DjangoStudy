@@ -10,6 +10,7 @@ class Post(models.Model):
     photo = models.ImageField(blank=True, upload_to='instagram/post/%Y/%m/%d')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    tag_set = models.ManyToManyField('Tag', blank=True)
 
     def __str__(self) -> str:
         # return f"Post object({self.pk})"
@@ -28,3 +29,11 @@ class Comment(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    # post_set = models.ManyToManyField('Post', blank=True)
+
+    def __str__(self) -> str:
+        return self.name
