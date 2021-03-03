@@ -18,6 +18,7 @@
     <table class="table table-bordered table-hover">
       {% for post in post_list %}
       <tr>
+        <td>{{post.pk}}</td>
         <td>{{post.message}}</td>
         <td>
           {% if post.photo%}
@@ -31,5 +32,6 @@
       </tr>
       {% endfor %}
     </table>
+    {{is_paginated}} {{page_obj}}
   </body>
 </html>

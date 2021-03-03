@@ -7,6 +7,7 @@ from django.db.models import query
 
 class PostListView(ListView):
     model = Post
+    paginate_by = 10
 
 
 post_list = PostListView.as_view()
