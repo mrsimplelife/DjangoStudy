@@ -1,6 +1,6 @@
-from instagram.models import Post
-from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.contrib import admin
+from instagram.models import Comment, Post
 # Register your models here.
 # admin.site.register(Post)
 
@@ -19,5 +19,10 @@ class PostAdmin(admin.ModelAdmin):
 
     def message_length(self, instance):
         return f"{len(instance.message)} 글자"
-    message_length.short_description = "메세지 글자수"
+    message_length.short_description = '메세지 글자수'
 # admin.site.register(Post, PostAdmin)
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    pass
