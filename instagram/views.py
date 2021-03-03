@@ -1,17 +1,30 @@
+from typing import Any
+# from django.utils.decorators import method_decorator
 # from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpRequest, HttpResponse
-from instagram.models import Post
 from django.db.models import query
+from django.contrib.auth.decorators import login_required
+from instagram.models import Post
 
 
-class PostListView(ListView):
+# @method_decorator(login_required, name='dispatch')
+class PostListView(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
 
+    # @method_decorator(login_required)
+    # def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    #     return super().dispatch(request, *args, **kwargs)
 
+
+# post_list = login_required(PostListView.as_view())
 post_list = PostListView.as_view()
+
 # post_list = ListView.as_view(model=Post)
+
+# @login_required
 # def post_list(request: HttpRequest) -> HttpResponse:
 #     q = request.GET.get('q', '')
 #     qs = Post.objects.all()
@@ -23,7 +36,8 @@ post_list = PostListView.as_view()
 #     })
 
 
-class PostDetailView(DetailView):
+# @method_decorator(login_required, name='dispatch')
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     # queryset = Post.objects.filter(is_public=True)
     # pass
