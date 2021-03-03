@@ -19,3 +19,8 @@ def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
     response = HttpResponse()
     response.write(f'{pk}')
     return response
+
+
+def archives_year(request: HttpRequest, year: int) -> HttpResponse:
+    return HttpResponse(f'{year}')
+    # return HttpResponse(f'2020')
