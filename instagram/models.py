@@ -4,6 +4,7 @@ from django.db import models
 class Post(models.Model):
     message = models.TextField(blank=True)
     is_public = models.BooleanField(default=False, verbose_name='공개')
+    photo = models.ImageField(blank=True, upload_to='instagram/post/%Y/%m/%d')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
