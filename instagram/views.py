@@ -2,8 +2,15 @@
 from django.views.generic import ListView, DetailView
 from django.http import Http404, HttpRequest, HttpResponse
 from instagram.models import Post
+from django.db.models import query
 
-post_list = ListView.as_view(model=Post)
+
+class PostListView(ListView):
+    model = Post
+
+
+post_list = PostListView.as_view()
+# post_list = ListView.as_view(model=Post)
 # def post_list(request: HttpRequest) -> HttpResponse:
 #     q = request.GET.get('q', '')
 #     qs = Post.objects.all()
@@ -14,7 +21,23 @@ post_list = ListView.as_view(model=Post)
 #         'q': q
 #     })
 
-post_detail = DetailView.as_view(model=Post)
+
+class PostDetailView(DetailView):
+    model = Post
+    # queryset = Post.objects.filter(is_public=True)
+    # pass
+
+    def get_queryset(self) -> query.QuerySet:
+        qs = super().get_queryset()
+        if not self.request.user.is_authenticated:
+            qs = qs.filter(is_public=True)
+        return qs
+
+
+post_detail = PostDetailView.as_view()
+
+# post_detail = DetailView.as_view(
+#     model=Post, queryset=Post.objects.filter(is_public=True))
 # def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
 #     post = get_object_or_404(Post, pk=pk)
 #     return render(request, 'instagram/post_detail.html', {
