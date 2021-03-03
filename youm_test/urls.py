@@ -13,18 +13,34 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from typing import Union
 from django.conf import settings
+from django.views.generic import TemplateView, RedirectView
 from django.contrib import admin
 from django.urls import URLPattern, URLResolver, path
 from django.urls.conf import include
 from django.conf.urls.static import static
 import debug_toolbar
 
+
+# class RootView(TemplateView):
+#     template_name = 'root.html'
+
+class RootView(RedirectView):
+    pattern_name = 'instagram:post_list'
+
+
 urlpatterns: list[Union[URLPattern, URLResolver]] = [
-
-
     path('admin/', admin.site.urls),
+
+    # path('', TemplateView.as_view(template_name='root.html'), name='root'),
+    # path('', RootView.as_view(), name='root'),
+    # path('', RedirectView.as_view(
+    #     # url='/instagram/'
+    #     pattern_name='instagram:post_list'
+    # ), name='root'),
+    path('', RootView.as_view(), name='root'),
     path('blog/', include('blog.urls')),
     path('instagram/', include('instagram.urls')),
     path('accounts/', include('accounts.urls')),
