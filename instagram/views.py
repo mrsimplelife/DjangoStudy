@@ -1,19 +1,44 @@
-from django.http import HttpRequest
-from django.shortcuts import redirect, render
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 # from django.utils.decorators import method_decorator
 # from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, DetailView, ArchiveIndexView, YearArchiveView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.db.models import query
+from django.contrib import messages
 from instagram.models import Post
 from instagram.forms import PostForm
 
 
+@login_required
+def post_edit(request: HttpRequest, pk: int) -> HttpResponse:
+    post = get_object_or_404(Post, pk=pk)
+
+    if post.author != request.user:
+        messages.error(request, 'only author cna edit')
+        return redirect(post)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post = form.save()
+            return redirect(post)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'instagram/post_edit.html', {
+        'form': form
+    })
+
+
+@login_required
 def post_new(request: HttpRequest):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
             return redirect(post)
     else:
         form = PostForm()

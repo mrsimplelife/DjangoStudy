@@ -9,7 +9,8 @@ post detali {{post.pk}}
   <img style="width: 100px" src="{{post.photo.url}}" alt="{{post.photo}}" />
 </div>
 {% endif %} 
-{{post.message}}
+{{post.message|linebreaks}}
 <hr />
-<a href="{% url 'instagram:post_list' %}" class="btn btn-primary">목록</a>
+<a href="{% url 'instagram:post_list' %}" class="btn btn-primary">list</a>
+<a href="{% url 'instagram:post_edit' post.pk %}" class="btn btn-info">edit</a>
 {% endblock content %}
