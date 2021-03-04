@@ -1,15 +1,28 @@
+from django.conf import settings
 from django.shortcuts import redirect, render
 from django.http import HttpRequest, HttpResponse
 # from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (TemplateView, UpdateView)
+from django.views.generic import (TemplateView, CreateView)
+
 from accounts.models import Profile
-from accounts.forms import ProfileForm
+from accounts.forms import ProfileForm, SignupForm
+
+User = get_user_model()
 
 
-def signup(request: HttpRequest):
-    return HttpResponse('yet')
+class SignupView(CreateView):
+    model = User
+    form_class = SignupForm
+    template_name = 'accounts/signup_form.html'
+    success_url = settings.LOGIN_URL
+
+
+signup = SignupView.as_view()
+# def signup(request: HttpRequest):
+# return HttpResponse('yet')
 
 
 def logout(request: HttpRequest):

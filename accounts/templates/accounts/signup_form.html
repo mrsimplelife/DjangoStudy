@@ -1,0 +1,11 @@
+{% extends 'accounts/layout.html' %} 
+{% load bootstrap5 %}
+{% block content %}
+<form action="" method="POST">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons %}
+  <input type="submit" value="signup" class="btn btn-primary"/>
+  {% endbuttons %}
+</form>
+{% endblock content %}
