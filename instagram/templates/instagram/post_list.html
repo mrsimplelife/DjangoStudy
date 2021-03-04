@@ -1,17 +1,8 @@
+{% extends 'instagram/layout.html' %}
 {% load bootstrap4 %}
-<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>instagram / post list</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
+
+{% block title %}post list{% endblock title %}
+{% block content %}
     <form action="" method="GET">
       <input type="text" name="q" value="{{q}}" />
       <input type="submit" value="search" />
@@ -21,10 +12,14 @@
       <tr>
         <td>{{post.pk}}</td>
         <td>
-          <a href="
+          <a
+            href="
           {% comment %} {% url 'instagram:post_detail' post.pk %} {% endcomment %}
           {{post.get_absolute_url}}
-          "> {{post.message}} </a>
+          "
+          >
+            {{post.message}}
+          </a>
         </td>
         <td>
           {% if post.photo%}
@@ -38,9 +33,7 @@
       </tr>
       {% endfor %}
     </table>
-    {{is_paginated}} {{page_obj}} 
-    {% if is_paginated %} 
+    {{is_paginated}} {{page_obj}} {% if is_paginated %}
     {% bootstrap_pagination page_obj size='small' justify_content='center' %} 
     {% endif %}
-  </body>
-</html>
+{% endblock content %}
