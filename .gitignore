@@ -148,3 +148,5 @@ instagram/models.py
 
 # Local History for Visual Studio Code
 .history/
+
+staticfiles

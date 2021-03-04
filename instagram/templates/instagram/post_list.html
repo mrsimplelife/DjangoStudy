@@ -1,39 +1,37 @@
-{% extends 'instagram/layout.html' %}
-{% load bootstrap4 %}
-
-{% block title %}post list{% endblock title %}
+{% extends 'instagram/layout.html' %} 
+{% load bootstrap4 %} 
+{% block title%}post list{% endblock title %} 
 {% block content %}
-    <form action="" method="GET">
-      <input type="text" name="q" value="{{q}}" />
-      <input type="submit" value="search" />
-    </form>
-    <table class="table table-bordered table-hover">
-      {% for post in post_list %}
+  <form action="" method="GET">
+    <input type="text" name="q" value="{{q}}" />
+    <input type="submit" value="search" />
+  </form>
+  <table class="table table-bordered table-hover">
+    {% for post in post_list %}
       <tr>
         <td>{{post.pk}}</td>
         <td>
           <a
             href="
-          {% comment %} {% url 'instagram:post_detail' post.pk %} {% endcomment %}
-          {{post.get_absolute_url}}
-          "
+              {% comment %} {% url 'instagram:post_detail' post.pk %} {% endcomment %}
+              {{post.get_absolute_url}}
+            "
           >
             {{post.message}}
           </a>
         </td>
         <td>
           {% if post.photo%}
-          <img
-            src="{{post.photo.url}}"
-            alt="{{post.photo}}"
-            style="width: 100px"
-          />
-          {% else %} no photo {% endif %}
+            <img src="{{post.photo.url}}" alt="{{post.photo}}" style="width: 100px" />
+          {% else %} 
+            no photo 
+          {% endif %}
         </td>
       </tr>
-      {% endfor %}
-    </table>
-    {{is_paginated}} {{page_obj}} {% if is_paginated %}
-    {% bootstrap_pagination page_obj size='small' justify_content='center' %} 
-    {% endif %}
+    {% endfor %}
+  </table>
+  {{is_paginated}} {{page_obj}} 
+  {% if is_paginated %} 
+  {% bootstrap_pagination page_obj size='small' justify_content='center' %} 
+  {% endif %} 
 {% endblock content %}
