@@ -15,7 +15,6 @@ from django.contrib import messages
 from instagram.models import Post
 from instagram.forms import PostForm
 
-
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('instagram:post_list')

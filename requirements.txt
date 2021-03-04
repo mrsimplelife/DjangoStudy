@@ -1,0 +1,6 @@
+django
+pillow
+django-debug-toolbar
+django-extensions
+django-bootstrap-v5
+pylint_django
