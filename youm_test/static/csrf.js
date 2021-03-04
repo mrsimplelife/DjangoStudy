@@ -15,7 +15,3 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 const request = new Request('', { headers: { 'X-CSRFToken': csrftoken } });
-fetch(request, {
-  method: 'POST',
-  mode: 'same-origin',
-}).then(function (response) {});

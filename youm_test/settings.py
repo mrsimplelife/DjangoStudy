@@ -42,7 +42,8 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'debug_toolbar',
-    'bootstrap4',
+    # 'bootstrap4',
+    'bootstrap5',
 
     'blog',
     'instagram',
