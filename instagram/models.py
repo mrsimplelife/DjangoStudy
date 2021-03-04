@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 
 
 class Post(models.Model):
@@ -11,6 +12,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tag_set = models.ManyToManyField('Tag', blank=True)
+
+    def get_absolute_url(self):
+        return reverse("instagram:post_detail", kwargs={"pk": self.pk})
 
     def __str__(self) -> str:
         # return f"Post object({self.pk})"

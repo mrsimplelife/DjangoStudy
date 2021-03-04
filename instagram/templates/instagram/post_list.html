@@ -20,7 +20,12 @@
       {% for post in post_list %}
       <tr>
         <td>{{post.pk}}</td>
-        <td>{{post.message}}</td>
+        <td>
+          <a href="
+          {% comment %} {% url 'instagram:post_detail' post.pk %} {% endcomment %}
+          {{post.get_absolute_url}}
+          "> {{post.message}} </a>
+        </td>
         <td>
           {% if post.photo%}
           <img
