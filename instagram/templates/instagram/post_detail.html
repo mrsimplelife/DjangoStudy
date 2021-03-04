@@ -1,13 +1,15 @@
-{% extends 'instagram/layout.html' %} 
-{% block title %}post new{{post.pk}}{% endblock title %} 
+{% extends 'instagram/layout.html' %}
+{% block title %}
+post detali {{post.pk}}
+{%endblock title %}
 {% block content %}
-    <h2>author:{{post.author}}</h2>
-    {% if post.photo %}
-        <div>
-            <img style="width: 100px" src="{{post.photo.url}}" alt="{{post.photo}}" />
-        </div>
-    {% endif %} 
-    {{post.message}}
-    <hr />
-    <a href="{% url 'instagram:post_list' %}" class="btn btn-primary"> 목록 </a>
+<h2>author:{{post.author}}</h2>
+{% if post.photo %}
+<div>
+  <img style="width: 100px" src="{{post.photo.url}}" alt="{{post.photo}}" />
+</div>
+{% endif %} 
+{{post.message}}
+<hr />
+<a href="{% url 'instagram:post_list' %}" class="btn btn-primary">목록</a>
 {% endblock content %}

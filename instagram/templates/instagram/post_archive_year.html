@@ -1,17 +1,13 @@
 <ul>
-    {% for date in date_list %}
-        <li>{{ date|date }}</li>
-    {% endfor %}
+  {% for date in date_list %}
+  <li>{{ date|date }}</li>
+  {% endfor %}
 </ul>
 
 <div>
-    <h1>All Articles for {{ year|date:"Y" }}</h1>
-    {% for obj in object_list %}
-        <p>
-            {{ obj.message }} - {{ obj.created_at|date:"F j, Y" }}
-        </p>
-    {% endfor %}
+  <h1>All Articles for {{ year|date:"Y" }}</h1>
+  {% for obj in object_list %}
+  <p>{{ obj.message }} - {{ obj.created_at|date:"F j, Y" }}</p>
+  {% endfor %}
 </div>
-{{previous_year}}
-{{year}}
-{{next_year}}
+{{previous_year}} {{year}} {{next_year}}

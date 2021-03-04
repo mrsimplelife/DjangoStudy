@@ -1,10 +1,10 @@
 <ul>
-    {% for post in latest %}
-        <li>{{ post.pk }} {{ post.created_at }}: {{ post.message }}</li>
-    {% endfor %}
+  {% for post in latest %}
+  <li>{{ post.pk }} {{ post.created_at }}: {{ post.message }}</li>
+  {% endfor %}
 </ul>
 <ul>
-    {% for date in date_list %}
-        <li>{{ date|date:'Y' }}</li>
-    {% endfor %}
+  {% for date in date_list %}
+  <li>{{ date|date:'Y' }}</li>
+  {% endfor %}
 </ul>

@@ -1,9 +1,9 @@
+from django.http import HttpRequest
 from django.shortcuts import redirect, render
 # from django.utils.decorators import method_decorator
 # from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, DetailView, ArchiveIndexView, YearArchiveView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest
 from django.db.models import query
 from instagram.models import Post
 from instagram.forms import PostForm

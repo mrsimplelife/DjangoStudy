@@ -1,5 +1,4 @@
-
-from django.urls import path,  register_converter
+from django.urls import path, register_converter
 from instagram import views
 from instagram.converters import DayConverter, MonthConverter, YearConverter
 
