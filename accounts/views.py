@@ -1,11 +1,19 @@
 from django.shortcuts import redirect, render
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 # from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (TemplateView, UpdateView)
 from accounts.models import Profile
 from accounts.forms import ProfileForm
+
+
+def signup(request: HttpRequest):
+    return HttpResponse('yet')
+
+
+def logout(request: HttpRequest):
+    return HttpResponse('yet')
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
