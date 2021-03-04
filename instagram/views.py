@@ -1,54 +1,73 @@
+from typing import Any
 from django.forms import BaseModelForm
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+# from django.shortcuts import get_object_or_404, redirect, render, resolve_url
+from django.urls import reverse_lazy
 # from django.utils.decorators import method_decorator
 # from django.shortcuts import get_object_or_404, render
+# from django.contrib.auth.decorators import login_required
 from django.views.generic import (
-    CreateView, ListView, YearArchiveView, ArchiveIndexView, DetailView,
+    CreateView, ListView, YearArchiveView, ArchiveIndexView, DetailView, UpdateView, DeleteView
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.db.models import query
 from django.contrib import messages
 from instagram.models import Post
 from instagram.forms import PostForm
 
 
-@login_required
-def post_delete(request: HttpRequest, pk: int) -> HttpResponse:
-    post = get_object_or_404(Post, pk=pk)
-    if post.author != request.user:
-        messages.error(request, 'only author cna delete')
-        return redirect(post)
-    if request.method == 'POST':
-        post.delete()
-        messages.success(request, 'post deleted')
-        return redirect('instagram:post_list')
-    return render(request, 'instagram/post_delete.html', {
-        'post': post
-    })
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('instagram:post_list')
 
 
-@login_required
-def post_edit(request: HttpRequest, pk: int) -> HttpResponse:
-    post = get_object_or_404(Post, pk=pk)
+post_delete = PostDeleteView.as_view()
 
-    if post.author != request.user:
-        messages.error(request, 'only author cna edit')
-        return redirect(post)
+# @login_required
+# def post_delete(request: HttpRequest, pk: int) -> HttpResponse:
+#     post = get_object_or_404(Post, pk=pk)
+#     if post.author != request.user:
+#         messages.error(request, 'only author cna delete')
+#         return redirect(post)
+#     if request.method == 'POST':
+#         post.delete()
+#         messages.success(request, 'post deleted')
+#         return redirect('instagram:post_list')
+#     return render(request, 'instagram/post_delete.html', {
+#         'post': post
+#     })
 
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES, instance=post)
-        if form.is_valid():
-            post = form.save()
-            messages.success(request, 'post edited')
-            return redirect(post)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'instagram/post_form.html', {
-        'form': form,
-        'post': post
-    })
+
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        messages.success(self.request, 'post edited')
+        return super().form_valid(form)
+
+
+post_edit = PostUpdateView.as_view()
+# @login_required
+# def post_edit(request: HttpRequest, pk: int) -> HttpResponse:
+#     post = get_object_or_404(Post, pk=pk)
+
+#     if post.author != request.user:
+#         messages.error(request, 'only author cna edit')
+#         return redirect(post)
+
+#     if request.method == 'POST':
+#         form = PostForm(request.POST, request.FILES, instance=post)
+#         if form.is_valid():
+#             post = form.save()
+#             messages.success(request, 'post edited')
+#             return redirect(post)
+#     else:
+#         form = PostForm(instance=post)
+#     return render(request, 'instagram/post_form.html', {
+#         'form': form,
+#         'post': post
+#     })
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -58,6 +77,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         post = form.save(commit=False)
         post.author = self.request.user
+        messages.success(self.request, 'post saved')
         return super().form_valid(form)
 
 
