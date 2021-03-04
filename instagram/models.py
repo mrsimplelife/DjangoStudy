@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinLengthValidator
 
 
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    message = models.TextField(blank=True)
+    message = models.TextField(validators=[MinLengthValidator(10)])
     is_public = models.BooleanField(default=False, verbose_name='공개')
     photo = models.ImageField(blank=True, upload_to='instagram/post/%Y/%m/%d')
     created_at = models.DateTimeField(auto_now_add=True)

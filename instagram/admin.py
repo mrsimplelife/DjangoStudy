@@ -12,6 +12,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = ['message']
     list_filter = ['is_public', 'created_at', ]
     search_fields = ['message']
+    # form = PostForm
 
     def photo_tag(self, instance: Post):
         if instance.photo:

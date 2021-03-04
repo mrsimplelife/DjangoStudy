@@ -1,5 +1,5 @@
 
-from django.urls import path, re_path, register_converter
+from django.urls import path,  register_converter
 from instagram import views
 from instagram.converters import DayConverter, MonthConverter, YearConverter
 
@@ -20,4 +20,5 @@ urlpatterns = [
     # path('archives/<year:year>/', views.archives_year)
     path('archive/', views.post_arcive, name='post_arcive'),
     path('archive/<year:year>/', views.post_arcive__year, name="post_arcive__year"),
+    path('new/', views.post_new, name='post_new')
 ]

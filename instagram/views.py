@@ -1,15 +1,29 @@
-from typing import Any
+from django.shortcuts import redirect, render
 # from django.utils.decorators import method_decorator
 # from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, DetailView, ArchiveIndexView, YearArchiveView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.db.models import query
-from django.contrib.auth.decorators import login_required
 from instagram.models import Post
+from instagram.forms import PostForm
 
+
+def post_new(request: HttpRequest):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save()
+            return redirect(post)
+    else:
+        form = PostForm()
+    return render(request, 'instagram/post_new.html', {
+        'form': form
+    })
 
 # @method_decorator(login_required, name='dispatch')
+
+
 class PostListView(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
