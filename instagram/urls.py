@@ -1,20 +1,12 @@
 
-from instagram import views
 from django.urls import path, re_path, register_converter
-
-
-class YearConverter:
-    regex = r"20\d{2}"
-
-    def to_python(self, value):
-        return int(value)
-
-    def to_url(self, value):
-        # return "%04d" % value
-        return str(value)
+from instagram import views
+from instagram.converters import DayConverter, MonthConverter, YearConverter
 
 
 register_converter(YearConverter, 'year')
+register_converter(MonthConverter, 'month')
+register_converter(DayConverter, 'day')
 app_name = 'instagram'
 urlpatterns = [
     path('', views.post_list, name='post_list'),
@@ -25,5 +17,7 @@ urlpatterns = [
     # path('archives/<int:year>/', views.archives_year)
     # re_path('archives/(?P<year>\\d+)/', views.archives_year)
     # re_path(r'archives/(?P<year>20\d{2})/', views.archives_year)
-    path('archives/<year:year>/', views.archives_year)
+    # path('archives/<year:year>/', views.archives_year)
+    path('archive/', views.post_arcive, name='post_arcive'),
+    path('archive/<year:year>/', views.post_arcive__year, name="post_arcive__year"),
 ]

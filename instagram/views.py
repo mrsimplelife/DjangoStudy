@@ -1,7 +1,7 @@
 from typing import Any
 # from django.utils.decorators import method_decorator
 # from django.shortcuts import get_object_or_404, render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, ArchiveIndexView, YearArchiveView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpRequest, HttpResponse
 from django.db.models import query
@@ -70,6 +70,22 @@ post_detail = PostDetailView.as_view()
 #     # return response
 
 
-def archives_year(request: HttpRequest, year: int) -> HttpResponse:
-    return HttpResponse(f'{year}')
-    # return HttpResponse(f'2020')
+class PostArchiveIndexView(ArchiveIndexView):
+    model = Post
+    date_field = 'created_at'
+    paginate_by = 10
+
+
+post_arcive = PostArchiveIndexView.as_view()
+# def archives_year(request: HttpRequest, year: int) -> HttpResponse:
+#     return HttpResponse(f'{year}')
+#     # return HttpResponse(f'2020')
+
+
+class PostYearArchiveView(YearArchiveView):
+    model = Post
+    date_field = 'created_at'
+    make_object_list = True
+
+
+post_arcive__year = PostYearArchiveView.as_view()
