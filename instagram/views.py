@@ -23,11 +23,13 @@ def post_edit(request: HttpRequest, pk: int) -> HttpResponse:
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save()
+            messages.info(request, 'post edited')
             return redirect(post)
     else:
         form = PostForm(instance=post)
-    return render(request, 'instagram/post_edit.html', {
-        'form': form
+    return render(request, 'instagram/post_form.html', {
+        'form': form,
+        'post': post
     })
 
 
@@ -39,10 +41,11 @@ def post_new(request: HttpRequest):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            messages.info(request, 'post saved')
             return redirect(post)
     else:
         form = PostForm()
-    return render(request, 'instagram/post_new.html', {
+    return render(request, 'instagram/post_form.html', {
         'form': form
     })
 
@@ -63,12 +66,15 @@ post_list = PostListView.as_view()
 
 # post_list = ListView.as_view(model=Post)
 
+
 # @login_required
 # def post_list(request: HttpRequest) -> HttpResponse:
 #     q = request.GET.get('q', '')
 #     qs = Post.objects.all()
 #     if q:
 #         qs = qs.filter(message__icontains=q)
+
+#     messages.info(request, 'test!!!!!')
 #     return render(request, 'instagram/post_list.html', {
 #         'post_list': qs,
 #         'q': q

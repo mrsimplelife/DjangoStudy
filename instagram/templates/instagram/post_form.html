@@ -1,0 +1,17 @@
+{% extends 'instagram/layout.html' %} 
+{% load bootstrap4 %}
+{% block title %} post new {{post.pk}}
+{%endblock title %} {% block content %}
+<form action="" method="POST" enctype="multipart/form-data">
+  <table>
+    {% csrf_token %} 
+    {% bootstrap_form form %}
+  </table>
+  <input type="submit" value="save" class="btn btn-primary"/>
+</form>
+<hr />
+{% if post %}
+<a href="{{post.get_absolute_url}}" class="btn btn-secondary">info</a>
+{% endif %}
+<a href="{% url 'instagram:post_list' %}" class="btn btn-primary">list</a>
+{% endblock content %}

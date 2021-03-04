@@ -1,4 +1,4 @@
-{% load static %}
+{% load static bootstrap4 %}
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -89,7 +89,7 @@
     <div class="container">
       <div class="ror">
         <div class="col-sm-12">
-          {% block content %}{% endblock content %}
+          {% bootstrap_messages %} {% block content %}{%endblock content %}
           <hr />
           &copy; YOUME
         </div>
