@@ -1,23 +1,36 @@
+from typing import Any
 from django.conf import settings
+from django.forms import BaseModelForm
 from django.shortcuts import redirect, render
 from django.http import HttpRequest, HttpResponse
 # from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login as auth_login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (TemplateView, CreateView)
-
+from django.contrib.auth.views import (LoginView)
 from accounts.models import Profile
-from accounts.forms import ProfileForm, SignupForm
+from accounts.forms import LoginForm, ProfileForm, SignupForm
 
 User = get_user_model()
 
 
 class SignupView(CreateView):
+    object = None
     model = User
     form_class = SignupForm
     template_name = 'accounts/signup_form.html'
     success_url = settings.LOGIN_URL
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        if request.user.is_authenticated:
+            return redirect(self.success_url)
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        response = super().form_valid(form)
+        auth_login(self.request, self.object)
+        return response
 
 
 signup = SignupView.as_view()
@@ -33,6 +46,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/profile.html"
 
 
+profile = ProfileView.as_view()
 # @login_required
 # def profile(request: HttpRequest):
 #     return render(request, 'accounts/profile.html', {})
@@ -41,18 +55,17 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 @login_required
 def profile_edit(request):
     try:
-        profile = request.user.profile
+        user_profile = request.user.profile
     except Profile.DoesNotExist:
-        profile = None
+        user_profile = None
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = request.user
+            instance = form.save(commit=False)
+            instance.user = request.user
             form.save()
             return redirect('profile')
-    form = ProfileForm(instance=profile)
-
+    form = ProfileForm(instance=user_profile)
     return render(request, 'accounts/profile_form.html', {'form': form})
 
 
@@ -62,3 +75,10 @@ def profile_edit(request):
 
 
 # profile_edit = ProfileUpdateView.as_view()
+class MyLoginView(LoginView):
+    template_name = 'accounts/login_form.html'
+    form_class = LoginForm
+    redirect_authenticated_user = True
+
+
+login = MyLoginView.as_view()

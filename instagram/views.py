@@ -1,6 +1,7 @@
-from typing import Any
+from typing import Any, Union
 from django.forms import BaseModelForm
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 # from django.shortcuts import get_object_or_404, redirect, render, resolve_url
 from django.urls import reverse_lazy
 # from django.utils.decorators import method_decorator
@@ -15,9 +16,18 @@ from django.contrib import messages
 from instagram.models import Post
 from instagram.forms import PostForm
 
+
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('instagram:post_list')
+    object: Union[Post, None] = None
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        response = super().get(request, *args, **kwargs)
+        if self.object.author != request.user:
+            messages.error(request, 'only author cna delete')
+            return redirect(self.object)
+        return response
 
 
 post_delete = PostDeleteView.as_view()
@@ -40,6 +50,14 @@ post_delete = PostDeleteView.as_view()
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
+    object: Union[Post, None] = None
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        response = super().get(request, *args, **kwargs)
+        if self.object.author != request.user:
+            messages.error(request, 'only author cna edit')
+            return redirect(self.object)
+        return response
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         messages.success(self.request, 'post edited')
