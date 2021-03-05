@@ -1,14 +1,13 @@
 from typing import Any
 from django.conf import settings
-from django.forms import BaseModelForm
-from django.shortcuts import redirect, render
-from django.http import HttpRequest, HttpResponse
-# from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model, login as auth_login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (TemplateView, CreateView)
-from django.contrib.auth.views import (LoginView)
+from django.contrib.auth import get_user_model, login as auth_login
+from django.contrib.auth.views import (LoginView, LogoutView)
+from django.forms import BaseModelForm
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
+from django.views.generic import (CreateView, TemplateView)
 from accounts.models import Profile
 from accounts.forms import LoginForm, ProfileForm, SignupForm
 
@@ -38,8 +37,22 @@ signup = SignupView.as_view()
 # return HttpResponse('yet')
 
 
-def logout(request: HttpRequest):
-    return HttpResponse('yet')
+class MyLoginView(LoginView):
+    template_name = 'accounts/login_form.html'
+    form_class = LoginForm
+    redirect_authenticated_user = True
+
+
+login = MyLoginView.as_view()
+
+
+class MyLogoutView(LogoutView):
+    next_page = 'login'
+
+
+logout = MyLogoutView.as_view()
+# def logout(request: HttpRequest):
+#     return HttpResponse('yet')
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
@@ -67,18 +80,9 @@ def profile_edit(request):
             return redirect('profile')
     form = ProfileForm(instance=user_profile)
     return render(request, 'accounts/profile_form.html', {'form': form})
-
-
 # class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 #     model = Profile
 #     form_class = ProfileForm
 
 
 # profile_edit = ProfileUpdateView.as_view()
-class MyLoginView(LoginView):
-    template_name = 'accounts/login_form.html'
-    form_class = LoginForm
-    redirect_authenticated_user = True
-
-
-login = MyLoginView.as_view()
